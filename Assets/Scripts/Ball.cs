@@ -5,11 +5,13 @@ using MinDI;
 public class Ball : ContextMonoBehaviour, IBall {
 
 	[Injection] ICoroutineManager coroutines { get; set; }
+	[Injection] Settings settings { get; set; }
 
 	private Coroutine shakeCoroutine = null;
 
 	protected override void OnInjected ()
 	{
+		this.GetComponent<Renderer> ().material.color = settings.ballColor;
 		coroutines.onGui += MyGUICall;
 	}
 
