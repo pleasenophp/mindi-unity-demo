@@ -9,9 +9,15 @@ public class GameMenu : ContextMonoBehaviour {
 	protected override void OnInjected ()
 	{
 		Debug.Log("Game menu is now onjected!");
+		coroutines.onGui += MyGUICall;
 	}
 
-	void OnGUI() {
+	protected override void OnDestruction ()
+	{
+		coroutines.onGui -= MyGUICall;
+	}
+
+	private void MyGUICall() {
 		GUILayout.Label ("Hello world");
 		GUILayout.Label ("Coroutines manager is: "+coroutines);
 	}
