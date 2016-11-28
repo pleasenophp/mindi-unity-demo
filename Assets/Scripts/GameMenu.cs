@@ -29,6 +29,14 @@ public class GameMenu : ContextMonoBehaviour {
 				ball = ballFactory.Create ();
 			}
 		} else {
+			if (GUILayout.Button ("Shake ball")) {
+				ball.Shake ();
+			}
+
+			if (GUILayout.Button ("Stop ball")) {
+				ball.Stop ();
+			}
+
 			if (GUILayout.Button ("Destroy ball")) {
 				ball = ballFactory.Destroy (ball);
 			}

@@ -6,6 +6,8 @@ public class Ball : ContextMonoBehaviour, IBall {
 
 	[Injection] ICoroutineManager coroutines { get; set; }
 
+	private Coroutine shakeCoroutine = null;
+
 	protected override void OnInjected ()
 	{
 		coroutines.onGui += MyGUICall;
@@ -13,15 +15,19 @@ public class Ball : ContextMonoBehaviour, IBall {
 
 	protected override void OnDestruction ()
 	{
+		Stop();
 		coroutines.onGui -= MyGUICall;
 	}
 
 	public void Shake() {
-		coroutines.StartCoroutine(ShakeMe());
+		shakeCoroutine = coroutines.StartCoroutine(ShakeMe());
 	}
 
 	public void Stop() {
-		coroutines.StopCoroutine(ShakeMe());
+		if (shakeCoroutine != null) {
+			coroutines.StopCoroutine (shakeCoroutine);
+			shakeCoroutine = null;
+		}
 	}
 
 	private void MyGUICall() {
@@ -30,7 +36,7 @@ public class Ball : ContextMonoBehaviour, IBall {
 
 	private IEnumerator ShakeMe() {
 		while (true) {
-			this.transform.position = new Vector3 (Mathf.PingPong (Time.time, 3), transform.position.y, transform.position.z);
+			this.transform.position = new Vector3 (Mathf.PingPong (Time.time*10f, 3), transform.position.y, transform.position.z);
 			yield return new WaitForEndOfFrame ();
 		}
 	}
