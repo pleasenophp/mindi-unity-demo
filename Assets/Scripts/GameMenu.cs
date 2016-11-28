@@ -5,6 +5,9 @@ using MinDI;
 public class GameMenu : ContextMonoBehaviour {
 
 	[Injection] ICoroutineManager coroutines { get; set; }
+	[Injection] IDIFactory<IBall> ballFactory { get; set; }
+
+	private IBall ball = null;
 
 	protected override void OnInjected ()
 	{
@@ -20,5 +23,15 @@ public class GameMenu : ContextMonoBehaviour {
 	private void MyGUICall() {
 		GUILayout.Label ("Hello world");
 		GUILayout.Label ("Coroutines manager is: "+coroutines);
+
+		if (ball == null) {
+			if (GUILayout.Button ("Spawn ball")) {
+				ball = ballFactory.Create ();
+			}
+		} else {
+			if (GUILayout.Button ("Destroy ball")) {
+				ball = ballFactory.Destroy (ball);
+			}
+		}
 	}
 }
